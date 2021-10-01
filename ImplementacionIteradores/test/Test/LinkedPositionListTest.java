@@ -6,6 +6,7 @@
 package Test;
 
 import implementacioniteradores.LinkedPositionList;
+import material.Position;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,7 +24,7 @@ public class LinkedPositionListTest {
     }
     public LinkedPositionList inicializa(){
        
-        LinkedPositionList instance = new LinkedPositionList();
+        LinkedPositionList<Float> instance = new LinkedPositionList<>();
         
         instance.add(new Float(3));
         instance.add(new Float(8));
@@ -101,7 +102,17 @@ public class LinkedPositionListTest {
     }
     @Test
     public void testAddAfter(){
-        System.out.println("add After");
+        try{
+            System.out.println("add After");
+            LinkedPositionList<Float> instance = inicializa();
+            Position<Float> p = instance.get();
+            instance.addAfter(p,new Float(2));
+            instance.remove(p);
+            assertEquals(new Float(2),instance.get().getElement());
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
         
     }
 

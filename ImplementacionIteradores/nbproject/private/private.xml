@@ -5,8 +5,10 @@
         <group>
             <file>file:/D:/Universidad/EDA/ImplementacionIteradores/src/implementacioniteradores/LinkedPositionList.java</file>
             <file>file:/D:/Universidad/EDA/ImplementacionIteradores/test/Test/LinkedPositionListTest.java</file>
+            <file>file:/D:/Universidad/EDA/ImplementacionIteradores/src/implementacioniteradores/DLinkedNode.java</file>
             <file>file:/D:/Universidad/EDA/ImplementacionIteradores/src/material/Position.java</file>
             <file>file:/D:/Universidad/EDA/ImplementacionIteradores/src/implementacioniteradores/MyListBetter.java</file>
+            <file>file:/D:/Universidad/EDA/ImplementacionIteradores/src/implementacioniteradores/LinkedPosListIterator.java</file>
         </group>
     </open-files>
 </project-private>

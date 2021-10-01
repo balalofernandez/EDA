@@ -39,7 +39,7 @@ public interface MyListBetter<E> extends Iterable<Position<E>>{
      * @param value 
      * @return  
      */
-    public Position<E> addAfter(Position<E> pos, E value);
+    public Position<E> addAfter(Position<E> pos, E value)throws InvalidPositionException;
     
     /**
      * Inserts the specified element before the specified position in this list (optional operation)
@@ -48,7 +48,7 @@ public interface MyListBetter<E> extends Iterable<Position<E>>{
      * @param value 
      * @return  
      */
-    public Position<E> addBefore(Position<E> pos, E value);
+    public Position<E> addBefore(Position<E> pos, E value)throws InvalidPositionException;
     
     /**
      * Remove and returns the element at the beginning of this list
@@ -56,7 +56,7 @@ public interface MyListBetter<E> extends Iterable<Position<E>>{
      * @param pos
      * @return 
      */
-    public E remove(Position<E> pos);
+    public E remove(Position<E> pos)throws InvalidPositionException;
     
         
     /**
@@ -64,7 +64,7 @@ public interface MyListBetter<E> extends Iterable<Position<E>>{
      * 
      * @return 
      */
-    public Position<E> get();
+    public Position<E> get()throws InvalidPositionException;
     
     /**
      * Modifies the element at the specified position in this list
@@ -73,7 +73,7 @@ public interface MyListBetter<E> extends Iterable<Position<E>>{
      * @param value
      * @return 
      */
-    public Position<E> set(Position<E> pos, E value);
+    public Position<E> set(Position<E> pos, E value)throws InvalidPositionException;
     
     /**
      * Returns the element's Position if this list contains the specified element

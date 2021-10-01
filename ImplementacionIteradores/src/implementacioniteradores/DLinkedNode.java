@@ -17,9 +17,15 @@ public class DLinkedNode<E> implements Position<E>{
     private DLinkedNode<E> prev;
     private E element;
     
+     
     public DLinkedNode(E element){
         next = null;
         prev = null;
+        this.element = element;
+    }
+     public DLinkedNode(E element, DLinkedNode prevNode, DLinkedNode nextNode){
+        next = nextNode;
+        prev = prevNode;
         this.element = element;
     }
     
