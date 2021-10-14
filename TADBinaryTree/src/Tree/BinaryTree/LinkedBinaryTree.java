@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import javafx.geometry.Pos;
 import material.Position;
+import TreeExceptions.*;
 
 /**
  *
@@ -20,6 +21,10 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
         private BTNode rightChild;
         private BTNode parent;
 
+        public BTNode() {
+
+        }
+
         BTNode(T e){
             this.element = e;
             leftChild = null;
@@ -30,6 +35,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
             element = e;
             this.parent = parent;
         }
+
 
         public T getElement() {
             return element;
@@ -70,22 +76,34 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
 
     @Override
     public Position<E> left(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            BTNode<E> node = checkPosition(v);
+            return node.getLeftChild();
+        }catch (InvalidPositionException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public Position<E> right(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            BTNode<E> node = checkPosition(v);
+            return node.getLeftChild();
+        }catch (InvalidPositionException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public boolean hasLeft(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return left(v) != null;
     }
 
     @Override
     public boolean hasRight(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return right(v) != null;
     }
 
     @Override
@@ -100,7 +118,12 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
 
     @Override
     public boolean isRoot(Position<E> p) {
-        BTNode<E> n = checkPosition(p);
+        BTNode<E> n = new BTNode<E>();
+        try {
+            n = checkPosition(p);
+        }catch (InvalidPositionException e){
+            e.printStackTrace();
+        }
         return n.getParent() == NULL;
     }
 
@@ -111,32 +134,84 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
 
     @Override
     public E replace(Position<E> p, E e) {
-        
+        //Se entiende que devolvemos el extraido
+        BTNode<E> n = new BTNode<E>();
+        try {
+            n = checkPosition(p);
+        }catch (InvalidPositionException error){
+            error.printStackTrace();
+        }
+        E aux = n.getElement();
+        n.setElement(e);
+        return aux;
     }
 
     @Override
     public Position<E> sibling(Position<E> p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTNode<E> n = new BTNode<E>();
+        if(isRoot(p)){
+            throw  new UnsupportedOperationException();
+        }
+        try {
+            n = checkPosition(p);
+        }catch (InvalidPositionException e){
+            e.printStackTrace();
+        }
+        BTNode<E> parent = n.getParent();
+        if(parent.getLeftChild() == n){
+            return parent.getRightChild();
+        }
+        else{
+            return parent.getLeftChild();
+        }
+
     }
 
     @Override
     public Position<E> addRoot(E e) {
-        this.root = new BTNode<E>(e)
+        return this.root = new BTNode<E>(e);
     }
 
     @Override
     public Position<E> insertLeft(Position<E> p, E e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTNode<E> n = new BTNode<E>();
+        try {
+            n = checkPosition(p);
+        }catch (InvalidPositionException error){
+            error.printStackTrace();
+        }
+        if(hasLeft(p)){
+            throw new UnsupportedOperationException();
+        }
+        n.setLeftChild(new BTNode(e,n));
+        return n;
     }
 
     @Override
     public Position<E> insertRight(Position<E> p, E e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTNode<E> n = new BTNode<E>();
+        try {
+            n = checkPosition(p);
+        }catch (InvalidPositionException error){
+            error.printStackTrace();
+        }
+        if(hasRight(p)){
+            throw new UnsupportedOperationException();
+        }
+        n.setRightChild(new BTNode(e,n));
+        return n;
     }
 
     @Override
     public E remove(Position<E> p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTNode<E> n = new BTNode<E>();
+        try {
+            n = checkPosition(p);
+        }catch (InvalidPositionException error){
+            error.printStackTrace();
+        }
+        //Tengo que hacer una llamada recursiva para ir eliminando los hijos
+        return n.getElement();
     }
 
     @Override
@@ -146,12 +221,12 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
 
     @Override
     public void attachLeft(Position<String> h, BinaryTree<String> t1) {
-
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void attachRight(Position<String> h, BinaryTree<String> t1) {
-
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -180,10 +255,12 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private Position<E> checkPosition(Position<E> p){
-        if (p != null || !(p instanceof Position)){
-            return p;
+    private BTNode<E> checkPosition(Position<E> p)throws InvalidPositionException{
+        if(p==null || !(p instanceof Position)){
+            throw new InvalidPositionException("The position is invalid");
         }
+        BTNode<E> n = (BTNode<E>) p;
+        return n;
     }
    
 }
