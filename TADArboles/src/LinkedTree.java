@@ -213,4 +213,22 @@ public class LinkedTree<E> implements NAryTree<E> {
         TreeNode<E> n = (TreeNode<E>) p;
         return n;
     }
+    //Para implementar el iterador next
+    /*
+    private Position<E> next(){
+        Position<E> p = lista.get(0);
+        lista.remove(0);
+        List<Position<E>> reverse_list = new LinkedList<>();
+        for Position<E> q: tree.children(p){
+            reverse_list.add(q);
+        }
+        for(Position<E> q: reverse_list){
+            lista.add(q)
+        }
+        return p
+    }
+     */
+
+    //POSIBLE EJERCICIO DE EXAMEN
+    //IMPLEMENTAR EL INORDEN X2 PRIMERO LOS PARES, LUEGO EL CENTRO Y LUEGO LOS IMPARES.
 }
