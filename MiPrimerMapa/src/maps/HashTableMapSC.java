@@ -1,5 +1,7 @@
 package maps;
 
+import sun.management.snmp.jvmmib.EnumJvmRTBootClassPathSupport;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -163,7 +165,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
         while(!esPrimo(p)){
             p++;
         }
-
+        this.primo = p;
         for (List<HashEntry<K, V>> l: mapa) {
             l = new LinkedList<>();
         }
@@ -278,6 +280,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
             if (key.equals(he.getKey())) {
                 V aux = he.getValue();
                 list.remove(he);
+                size--;
                 return aux;
             }
         }
@@ -286,7 +289,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
 
     @Override
     public Iterator<Entry<K, V>> iterator() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return new HashTableMapIterator<K, V>(mapa, size);
     }
 
     /**
@@ -296,7 +299,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      */
     @Override
     public Iterable<K> keys() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        HashTableMapKeyIterator<K, V> it= new HashTableMapKeyIterator<>(new HashTableMapIterator<K, V>(mapa, size));
     }
 
     /**
@@ -333,6 +336,29 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      * @param newCap
      */
     protected void rehash(int newCap) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        HashTableMapSC<K,V> mapaAux = new HashTableMapSC<>(newCap);
+        for(Entry<K,V> entrada: this){
+            mapaAux.put(entrada.getKey(),entrada.getValue());
+        }
+        this.mapa = mapaAux.getMapa();
+        this.primo = mapaAux.getPrimo();
+        this.a = mapaAux.getA();
+        this.b = mapaAux.getB();
+    }
+
+    public ArrayList<LinkedList<HashEntry<K, V>>> getMapa() {
+        return mapa;
+    }
+
+    public int getPrimo() {
+        return primo;
+    }
+
+    public int getA() {
+        return a;
+    }
+
+    public int getB() {
+        return b;
     }
 }
