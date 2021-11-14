@@ -15,7 +15,9 @@ public class main {
         mapa.put(new Alumno("Ian","52345482R"),7);
         mapa.put(new Alumno("Ian","52345482R"),10);
         int a = mapa.get(new Alumno("Ian","52345482R"));
-        System.out.print(a);
+        System.out.println(a);
+        int b = mapa.get(new Alumno("Amaia","11111211G"));
+        System.out.println(b);
 
     }
 }

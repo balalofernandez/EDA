@@ -29,7 +29,7 @@ public class Alumno {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Alumno alumno = (Alumno) o;
-        return this.dni.equals(alumno.getDni()) && this.nombre.equals(alumno.getNombre());
+        return true;//this.dni.equals(alumno.getDni()) && this.nombre.equals(alumno.getNombre());
     }
 
     @Override

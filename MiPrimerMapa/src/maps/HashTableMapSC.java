@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class HashTableMapSC<K, V> implements Map<K, V> {
 
-    ArrayList<List<HashEntry<K,V>>> mapa;
+    ArrayList<LinkedList<HashEntry<K,V>>> mapa;
     int primo = -1;
     int a;
     int b;
@@ -226,7 +226,16 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
     public V get(K key) throws IllegalStateException {
         if(key == null)
             throw new IllegalStateException("Clave no valida");
-        hashValue()
+        int hv = hashValue(key);
+        LinkedList<HashEntry<K,V>> list = this.mapa.get(hv);
+        if(list != null){{
+            for(HashEntry<K,V> he:list){
+                if(key.equals(he.getKey())){
+                    return he.getValue();
+                }
+            }
+        }
+        return null;
     }
 
     /**
