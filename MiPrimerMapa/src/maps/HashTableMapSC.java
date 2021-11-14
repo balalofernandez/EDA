@@ -132,7 +132,8 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      * Creates a hash table
      */
     public HashTableMapSC() {
-        this.mapa = new ArrayList<>();
+        this.mapa = new ArrayList<>(101);
+        primo = 103;
         for (List<HashEntry<K, V>> l: mapa) {
             l = new LinkedList<>();
         }
@@ -140,6 +141,15 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
         b = (int) (Math.random() * (primo-1));
     }
 
+    private boolean esPrimo(int n){
+        boolean primo = true;
+        int aux=2;
+        while(primo){
+            primo = !(n % aux == 0);
+            n++;
+        }
+        return primo;
+    }
     /**
      * Creates a hash table.
      *
@@ -147,6 +157,12 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      */
     public HashTableMapSC(int cap) {
         this.mapa = new ArrayList<>(cap);
+        //Vamos a buscar el siguiente primo
+        int p = cap +1;
+        while(!esPrimo(p)){
+            p++;
+        }
+
         for (List<HashEntry<K, V>> l: mapa) {
             l = new LinkedList<>();
         }
