@@ -258,6 +258,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
             }
         }
         list.add(new HashEntry<K,V>(key,value));
+        size++;
         return null;
     }
 
@@ -269,7 +270,18 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      */
     @Override
     public V remove(K key) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(key == null)
+            throw new IllegalStateException("Clave no valida");
+        int hv = hashValue(key);
+        LinkedList<HashEntry<K,V>> list = this.mapa.get(hv);
+        for(HashEntry<K,V> he:list) {
+            if (key.equals(he.getKey())) {
+                V aux = he.getValue();
+                list.remove(he);
+                return aux;
+            }
+        }
+        return null;
     }
 
     @Override
