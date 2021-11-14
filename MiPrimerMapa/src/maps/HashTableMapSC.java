@@ -23,22 +23,20 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
     private class HashEntry<T, U> implements Entry<T, U> {
         private T t;
         private U u;
+
         public HashEntry(T k, U v) {
-            throw new UnsupportedOperationException("Not yet implemented");
+            this.t=k;
+            this.u=v;
         }
+        @Override
+        public U getValue() { return u;}
 
         @Override
-        public U getValue() {
-            throw new UnsupportedOperationException("Not yet implemented");
-        }
-
-        @Override
-        public T getKey() {
-            throw new UnsupportedOperationException("Not yet implemented");
-        }
+        public T getKey() {return t;}
 
         public U setValue(U val) {
-            throw new UnsupportedOperationException("Not yet implemented");
+            u=val;
+            return u;
         }
 
         @Override
@@ -51,12 +49,9 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
             return this.t.equals(obj) && this.u.equals(obj);
         }
 
-        /**
-         * Entry visualization.
-         */
         @Override
         public String toString() {
-            throw new UnsupportedOperationException("Not yet implemented");
+            return "("+t.toString()+","+u.toString()+")";
         }
     }
 
