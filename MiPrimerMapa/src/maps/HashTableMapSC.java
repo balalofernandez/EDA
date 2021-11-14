@@ -19,6 +19,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
     int primo = -1;
     int a;
     int b;
+    int size;
 
     private class HashEntry<T, U> implements Entry<T, U> {
         private T t;
@@ -193,7 +194,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      * @return
      */
     protected int hashValue(K key) {
-        return ((a* key.hashCode()+b) % primo) % size();
+        return ((a* key.hashCode()+b) % primo) % mapa.size();
     }
 
     /**
@@ -203,7 +204,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      */
     @Override
     public int size() {
-        return mapa.size();
+        return size;
     }
 
     /**
@@ -228,11 +229,9 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
             throw new IllegalStateException("Clave no valida");
         int hv = hashValue(key);
         LinkedList<HashEntry<K,V>> list = this.mapa.get(hv);
-        if(list != null){{
-            for(HashEntry<K,V> he:list){
-                if(key.equals(he.getKey())){
-                    return he.getValue();
-                }
+        for(HashEntry<K,V> he:list){
+            if(key.equals(he.getKey())){
+                return he.getValue();
             }
         }
         return null;
@@ -247,7 +246,19 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      */
     @Override
     public V put(K key, V value) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(key == null)
+            throw new IllegalStateException("Clave no valida");
+        int hv = hashValue(key);
+        LinkedList<HashEntry<K,V>> list = this.mapa.get(hv);
+        for(HashEntry<K,V> he:list) {
+            if (key.equals(he.getKey())) {
+                V aux = he.getValue();
+                he.setValue(value);
+                return aux;
+            }
+        }
+        list.add(new HashEntry<K,V>(key,value));
+        return null;
     }
 
     /**
