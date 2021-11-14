@@ -2,6 +2,8 @@ package maps;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Separate chaining table implementation of hash tables. Note that all
@@ -13,8 +15,14 @@ import java.util.Iterator;
  */
 public class HashTableMapSC<K, V> implements Map<K, V> {
 
-    private class HashEntry<T, U> implements Entry<T, U> {
+    ArrayList<List<HashEntry<K,V>>> mapa;
+    int primo = -1;
+    int a;
+    int b;
 
+    private class HashEntry<T, U> implements Entry<T, U> {
+        private T t;
+        private U u;
         public HashEntry(T k, U v) {
             throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -35,9 +43,12 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
 
         @Override
         public boolean equals(Object o) {
-            if(o == null)
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
                 return false;
-            if()
+            HashEntry obj = (HashEntry) o;
+            return this.t.equals(obj) && this.u.equals(obj);
         }
 
         /**
@@ -126,7 +137,12 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      * Creates a hash table
      */
     public HashTableMapSC() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.mapa = new ArrayList<>();
+        for (List<HashEntry<K, V>> l: mapa) {
+            l = new LinkedList<>();
+        }
+        a = (int) (Math.random() * (primo-1));
+        b = (int) (Math.random() * (primo-1));
     }
 
     /**
@@ -135,7 +151,12 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      * @param cap initial capacity
      */
     public HashTableMapSC(int cap) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.mapa = new ArrayList<>(cap);
+        for (List<HashEntry<K, V>> l: mapa) {
+            l = new LinkedList<>();
+        }
+        a = (int) (Math.random() * (primo-1));
+        b = (int) (Math.random() * (primo-1));
     }
 
     /**
@@ -145,7 +166,13 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      * @param cap initial capacity
      */
     public HashTableMapSC(int p, int cap) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.primo = p;
+        this.mapa = new ArrayList<>(cap);
+        for (List<HashEntry<K, V>> l: mapa) {
+            l = new LinkedList<>();
+        }
+        a = (int) (Math.random() * (primo-1));
+        b = (int) (Math.random() * (primo-1));
     }
 
     /**
@@ -155,7 +182,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      * @return
      */
     protected int hashValue(K key) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return ((a* key.hashCode()+b) % primo) % size();
     }
 
     /**
@@ -165,7 +192,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      */
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return mapa.size();
     }
 
     /**
@@ -175,7 +202,7 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      */
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return mapa.isEmpty();
     }
 
     /**
@@ -186,7 +213,9 @@ public class HashTableMapSC<K, V> implements Map<K, V> {
      */
     @Override
     public V get(K key) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(key == null)
+            throw new IllegalStateException("Clave no valida");
+        hashValue()
     }
 
     /**

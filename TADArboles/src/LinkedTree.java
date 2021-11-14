@@ -2,8 +2,7 @@
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import material.Position;
 
 /**
@@ -100,28 +99,29 @@ public class LinkedTree<E> implements NAryTree<E> {
     }
 
     @Override
-    public Position<E> add(E element, Position<E> p) {//añadimos el hijo del nodo p
-        try{
+    public Position<E> add(E element, Position<E> p) {
+        TreeNode<E> parent = null;
+        try {
             parent = checkPosition(p);
-            return parent.addChild(element);
-        }
-        catch(InvalidPositionException e){
+        } catch (InvalidPositionException e) {
             e.printStackTrace();
-            return null;
         }
-        
+        TreeNode<E> node = new TreeNode<>(element, parent);
+        parent.getChilds().add(node);
+        return node;
     }
 
     @Override
     public Position<E> add(E element, Position<E> p, int n) {
-        try{
+        TreeNode<E> parent = null;
+        try {
             parent = checkPosition(p);
-            return parent.addChild(element,n);
-        }
-        catch(Exception e){
+        } catch (InvalidPositionException e) {
             e.printStackTrace();
-            return null;
         }
+        TreeNode<E> node = new TreeNode<>(element, parent);
+        parent.getChilds().add(n, node);
+        return node;
     }
 
     @Override
@@ -149,58 +149,125 @@ public class LinkedTree<E> implements NAryTree<E> {
 
     @Override
     public void remove(Position<E> p) {
-        TreeNode<E> node = (TreeNode<E>) p;
+        try{
+            if(isRoot(p)){
+                this.root = null;
+            }
+            else{
+                TreeNode<E> node = checkPosition(p);
+                TreeNode<E> parent = node.getParent();
+                parent.getChilds().remove(node);
+            }
+        }catch (InvalidPositionException e){
+            e.printStackTrace();
+        }
         
     }
 
+    private void setRoot(TreeNode<E> n){
+        this.root = n;
+    }
     @Override
     public NAryTree<E> subTree(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = null;
+        try{
+            node = checkPosition(v);
+        }catch (InvalidPositionException e){
+            e.printStackTrace();
+        }
+        TreeNode<E> parent = node.getParent();
+        parent.getChilds().remove(node);
+        node.setParent(null);
+        LinkedTree<E> newTree = new LinkedTree<>();
+        newTree.setRoot(root);
+        return newTree;
     }
 
     @Override
     public void attach(Position<E> p, NAryTree<E> t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = null;
+        try {
+            node = checkPosition(t.root());
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+        }
+        if(p==null){
+            root = node;
+        }
+        else{
+            TreeNode<E> parent = null;
+            try {
+                parent = checkPosition(p);
+            } catch (InvalidPositionException e) {
+                e.printStackTrace();
+            }
+            node.setParent(parent);
+            parent.getChilds().add(node);
+        }
     }
 
     @Override
     public boolean isEmpty() {
-        return this.root == null;//To change body of generated methods, choose Tools | Templates.
+        return root==null;
     }
 
     @Override
     public Position<E> root() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return root;
     }
 
     @Override
     public Position<E> parent(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> n = null;
+        try {
+            n = checkPosition(v);
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+        }
+        return n.getParent();
     }
 
     @Override
     public Iterable<? extends Position<E>> children(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = null;
+        try {
+            node = checkPosition(v);
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+        }
+        return node.getChilds();
     }
 
     @Override
     public boolean isInternal(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !(isLeaf(v)||isRoot(v));
     }
 
     @Override
     public boolean isLeaf(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = null;
+        try {
+            node = checkPosition(v);
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+        }
+        return node.getChilds().isEmpty();
     }
 
     @Override
     public boolean isRoot(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = null;
+        try {
+            node = checkPosition(v);
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+        }
+        return node.getParent()==null;
     }
 
     @Override
     public Iterator<Position<E>> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new PreOrderIterator<>(this);
     }
  
     public int size(){
@@ -213,6 +280,8 @@ public class LinkedTree<E> implements NAryTree<E> {
         TreeNode<E> n = (TreeNode<E>) p;
         return n;
     }
+
+
     //Para implementar el iterador next
     /*
     private Position<E> next(){
