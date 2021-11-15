@@ -2,6 +2,9 @@
 package material.tree;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+
+import javafx.geometry.Pos;
 import material.Position;
 
 /**
@@ -11,17 +14,26 @@ import material.Position;
  */
 public class BreadthFirstTreeIterator<T> implements Iterator<Position<T>> {
 
-        
-    public BreadthFirstTreeIterator(Tree<T> tree, Position<T> root) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    LinkedList<Position<T>> lista;
+    Tree<T> tree;
+
+    public BreadthFirstTreeIterator(Tree<T> tree, Position<T> root){
+        this.tree = tree;
+        lista = new LinkedList<>();
+        lista.add(root);
     }
-    public BreadthFirstTreeIterator(Tree<T> tree) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public BreadthFirstTreeIterator(Tree<T> tree){
+        this.tree = tree;
+        lista = new LinkedList<>();
+        if(tree.root() != null){
+            lista.add(tree.root());
+        }
     }
-    
+
     @Override
     public boolean hasNext() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !lista.isEmpty();
     }
 
     /**
@@ -29,7 +41,11 @@ public class BreadthFirstTreeIterator<T> implements Iterator<Position<T>> {
      */
     @Override
     public Position<T> next() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> aux = lista.pop();
+        for(Position<T> p : tree.children(aux)){
+            lista.add(p);
+        }
+        return aux;
     }
 
    

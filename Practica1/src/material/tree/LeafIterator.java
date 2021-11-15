@@ -2,6 +2,9 @@
 package material.tree;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+
+import javafx.geometry.Pos;
 import material.Position;
 
 /**
@@ -11,19 +14,29 @@ import material.Position;
  */
 public class LeafIterator<T> implements Iterator<Position<T>>  {
     
-    
+    LinkedList<Position<T>> lista;
+    Tree<T> tree;
+    LinkedList<Position<T>> reverseList;
 
     public LeafIterator(Tree<T> tree, Position<T> root){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tree = tree;
+        lista = new LinkedList<>();
+        lista.add(root);
+        reverseList = new LinkedList<>();
     }
     
     public LeafIterator(Tree<T> tree){
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tree = tree;
+        lista = new LinkedList<>();
+        if(tree.root() != null){
+            lista.add(tree.root());
+        }
+        reverseList = new LinkedList<>();
     }
     
     @Override
     public boolean hasNext() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !lista.isEmpty();
     }
 
     /**
@@ -31,7 +44,17 @@ public class LeafIterator<T> implements Iterator<Position<T>>  {
      */
     @Override
     public Position<T> next() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> aux = lista.pop();
+        while(!tree.isLeaf(aux)){
+            for(Position<T> k : tree.children(aux)){
+                reverseList.addFirst(k);
+            }
+            while(!reverseList.isEmpty()){
+                lista.addFirst(reverseList.pop());
+            }
+            aux = lista.pop();
+        }
+        return aux;
     }
 
     

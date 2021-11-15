@@ -98,8 +98,9 @@ public class LCRSTree<T> implements NAryTree<T> {
     @Override
     public Position<T> addRoot(T e) {
         try{
-            if(!isEmpty())
+            if(!isEmpty()){
                 throw new IllegalStateException("Tree is not empty");
+            }
             root = new LCRSTreeNode<>(e);
             return root;
         }catch (IllegalStateException err){
