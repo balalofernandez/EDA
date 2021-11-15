@@ -2,7 +2,10 @@
 package material.tree.binarytree;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+
 import material.Position;
+import sun.awt.image.ImageWatched;
 
 /**
  *
@@ -11,19 +14,39 @@ import material.Position;
  */
 public class InorderBinaryTreeIterator<T> implements Iterator<Position<T>> {
 
-       
+    BinaryTree<T> tree;
+    LinkedList<Position<T>> lista;
+    LinkedList<Position<T>> listaAux;
+
+
     public InorderBinaryTreeIterator(BinaryTree <T> tree) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.lista = new LinkedList<Position<T>> ();
+        this.listaAux = new LinkedList<Position<T>> ();
+        this.tree = tree;
+        Position<T> node = tree.root();
+        lista.addFirst(node);
+        while (tree.hasLeft(node)){
+            lista.addFirst(tree.left(node));
+            node = tree.left(node);
+        }
     }
 
     public InorderBinaryTreeIterator(BinaryTree <T> tree, Position<T> node) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.lista = new LinkedList<Position<T>> ();
+        this.listaAux = new LinkedList<Position<T>> ();
+        this.tree = tree;
+        Position<T> Nnode = node;
+        lista.addFirst(Nnode);
+        while (tree.hasLeft(Nnode)){
+            lista.addFirst(tree.left(Nnode));
+            Nnode = tree.left(Nnode);
+        }
     }
 
          
     @Override
     public boolean hasNext() {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !lista.isEmpty();
     }
 
     /**
@@ -31,7 +54,16 @@ public class InorderBinaryTreeIterator<T> implements Iterator<Position<T>> {
      */
     @Override
     public Position<T> next() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> aux = this.lista.pop();
+        if(tree.hasRight(aux)){
+            Position<T> aux2 = tree.right(aux);
+            lista.addFirst(aux2);
+            while (tree.hasLeft(aux2)){
+                aux2 = tree.left(aux2);
+                lista.addFirst(aux2);
+            }
+        }
+        return aux;
     }
 
     
