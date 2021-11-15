@@ -66,5 +66,4 @@ public class InorderBinaryTreeIterator<T> implements Iterator<Position<T>> {
         return aux;
     }
 
-    
 }

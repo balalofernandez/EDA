@@ -16,7 +16,7 @@ import material.tree.PreOrderTreeIterator;
  */
 public class LinkedBinaryTree<E> implements BinaryTree<E>{
 
-    private BTNode<E> root;
+    private BTNode<E> root = null;
 
     private class BTNode<T> implements Position<T>{
         private T element;
@@ -25,7 +25,10 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
         private BTNode parent;
 
         public BTNode() {
-
+            element = null;
+            this.parent = null;
+            rightChild = null;
+            leftChild = null;
         }
 
         BTNode(T e){
@@ -37,6 +40,8 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
         BTNode(T e, BTNode<T> parent){
             element = e;
             this.parent = parent;
+            rightChild = null;
+            leftChild = null;
         }
 
 
@@ -73,8 +78,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
         }
     }
 
-    LinkedBinaryTree(){
-        root = null;
+    public LinkedBinaryTree(){
     }
 
     public LinkedBinaryTree(BTNode<E> root) {
@@ -96,7 +100,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
     public Position<E> right(Position<E> v) {
         try{
             BTNode<E> node = checkPosition(v);
-            return node.getLeftChild();
+            return node.getRightChild();
         }catch (InvalidPositionException e){
             e.printStackTrace();
             return null;
@@ -157,7 +161,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
     public Position<E> sibling(Position<E> p) {
         BTNode<E> n = new BTNode<E>();
         if(isRoot(p)){
-            throw  new UnsupportedOperationException();
+            return null;
         }
         try {
             n = checkPosition(p);
@@ -176,54 +180,85 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
 
     @Override
     public Position<E> addRoot(E e) {
-        return this.root = new BTNode<E>(e);
+        return this.root = new BTNode<>(e);
     }
 
     @Override
     public Position<E> insertLeft(Position<E> p, E e) {
-        BTNode<E> n = new BTNode<E>();
+        BTNode<E> node = null;
         try {
-            n = checkPosition(p);
-        }catch (InvalidPositionException error){
-            error.printStackTrace();
+            node = checkPosition(p);
+        } catch (InvalidPositionException ex) {
+            ex.printStackTrace();
         }
-        if(hasLeft(p)){
-            throw new UnsupportedOperationException();
+        BTNode<E> newNode = new BTNode<>(e);
+        if(node!=null&&node.getLeftChild()==null){
+            newNode.setParent(node);
+            node.setLeftChild(newNode);
         }
-        n.setLeftChild(new BTNode(e,n));
-        return n;
+        return newNode;
     }
 
     @Override
     public Position<E> insertRight(Position<E> p, E e) {
-        BTNode<E> n = new BTNode<E>();
+        BTNode<E> node = null;
         try {
-            n = checkPosition(p);
-        }catch (InvalidPositionException error){
-            error.printStackTrace();
+            node = checkPosition(p);
+        } catch (InvalidPositionException ex) {
+            ex.printStackTrace();
         }
-        if(hasRight(p)){
-            throw new UnsupportedOperationException();
+        BTNode<E> newNode = new BTNode<>(e);
+        if(node!=null&&node.getRightChild()==null){
+            newNode.setParent(node);
+            node.setRightChild(newNode);
         }
-        n.setRightChild(new BTNode(e,n));
-        return n;
-    }
+        return newNode;}
 
     @Override
     public E remove(Position<E> p) {
-        BTNode<E> n = new BTNode<E>();
+        BTNode<E> node = null;
         try {
-            n = checkPosition(p);
-        }catch (InvalidPositionException error){
-            error.printStackTrace();
+            node = checkPosition(p);
+        } catch (InvalidPositionException e) {
+            throw new RuntimeException("Invalid position");
         }
-        //Tengo que hacer una llamada recursiva para ir eliminando los hijos
-        return n.getElement();
+        if(hasRight(node)||hasLeft(node)){
+            throw new RuntimeException("The node has a child");
+        }
+        E element = node.getElement();
+        BTNode<E> parent = node.getParent();
+        node.setParent(null);
+        if (parent==null){
+            if(node.equals(root)) root=null;
+        }
+        else{
+            if(parent.getRightChild().equals(node)){
+                parent.setRightChild(null);
+            }
+            else{
+                parent.setLeftChild(null);
+            }
+        }
+        return element;
     }
+
 
     @Override
     public void swap(Position<E> p1, Position<E> p2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTNode<E> node1 = null;
+        BTNode<E> node2 = null;
+        try {
+            node1 = checkPosition(p1);
+            node2 = checkPosition(p2);
+
+        } catch (InvalidPositionException ex) {
+            ex.printStackTrace();
+        }
+        if(node1!=null&&node2!=null){
+            E aux =node1.getElement();
+            node1.setElement(node2.getElement());
+            node2.setElement(aux);
+        }
     }
 
     @Override
@@ -231,7 +266,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
         try {
             BTNode<E>node = checkPosition(h);
             BTNode<E> left = checkPosition(t1.root());
-            node.setLeftChild(node);
+            node.setLeftChild(left);
             left.setParent(node);
         }
         catch (InvalidPositionException err){
@@ -244,7 +279,7 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
         try {
             BTNode<E>node = checkPosition(h);
             BTNode<E> right = checkPosition(t1.root());
-            node.setRightChild(node);
+            node.setRightChild(right);
             right.setParent(node);
         }
         catch (InvalidPositionException err){
@@ -263,31 +298,47 @@ public class LinkedBinaryTree<E> implements BinaryTree<E>{
 
         BTNode<E> node = null;
         try{
+            if(isRoot(v)){
+                throw new RuntimeException("Doesnot have parent");
+            }
             node = checkPosition(v);
         }
         catch (InvalidPositionException err){
             err.printStackTrace();
         }
+
         return node.getParent();
     }
 
     @Override
     public Iterator<Position<E>> iterator() {
-        return new PreOrderTreeIterator<>(this);
+
+        return new InorderBinaryTreeIterator<>(this);
     }
 
     @Override
     public LinkedBinaryTree<E> subTree(Position<E> h) {
         BTNode<E> node = null;
-        try{
+        try {
             node = checkPosition(h);
+        } catch (InvalidPositionException e) {
+            throw new RuntimeException("Invalid position");
         }
-        catch (InvalidPositionException err){
-            err.printStackTrace();
+        BTNode<E> parent = node.getParent();
+        if(parent==null){
+            this.root=null;
         }
-        remove(node);
-        node.setParent(null);
-        LinkedBinaryTree<E> tree = new LinkedBinaryTree<>(node);
+        else{
+            if(parent.getLeftChild().equals(node)){
+                parent.setLeftChild(null);
+            }
+            else if(parent.getRightChild().equals(node)){
+                parent.setRightChild(null);
+            }
+            node.setParent(null);
+        }
+        LinkedBinaryTree<E> tree = new LinkedBinaryTree<>();
+        tree.root=node;
         return tree;
     }
 
