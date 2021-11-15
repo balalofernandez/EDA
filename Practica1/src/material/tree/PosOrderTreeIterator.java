@@ -2,6 +2,7 @@ package material.tree;
 
 import material.Position;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  *
@@ -10,18 +11,25 @@ import java.util.Iterator;
  */
 public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
 
-       
+    Tree<T> tree;
+    LinkedList<Position<T>> lista;
+    //LinkedList<Position<T>> reverseList;
+
     public PosOrderTreeIterator(Tree<T> tree) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tree = tree;
+        lista = new LinkedList<>();
+        lista.add(tree.root());
     }
 
     public PosOrderTreeIterator(Tree<T> tree, Position<T> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tree = tree;
+        lista = new LinkedList<>();
+        lista.add(root);
     }
 
     @Override
     public boolean hasNext() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !lista.isEmpty();
     }
 
     /**
@@ -29,7 +37,6 @@ public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
      */
     @Override
     public Position<T> next() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
     }
 

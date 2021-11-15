@@ -2,7 +2,10 @@
 package material.tree;
 
 import material.Position;
+import sun.awt.image.ImageWatched;
+
 import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  *
@@ -11,19 +14,26 @@ import java.util.Iterator;
  */
 public class PreOrderTreeIterator<T> implements Iterator<Position<T>> {
 
-    
-
+    Tree<T> tree;
+    LinkedList<Position<T>> lista;
+    LinkedList<Position<T>> reverseList;
     public PreOrderTreeIterator(Tree<T> tree) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tree = tree;
+        lista = new LinkedList<>();
+        lista.add(tree.root());
+        reverseList = new LinkedList<>();
     }
 
     public PreOrderTreeIterator(Tree<T> tree, Position<T> root) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tree = tree;
+        lista = new LinkedList<>();
+        lista.add(root);
+        reverseList = new LinkedList<>();
     }
 
     @Override
     public boolean hasNext() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !lista.isEmpty();
     }
 
     /**
@@ -31,7 +41,14 @@ public class PreOrderTreeIterator<T> implements Iterator<Position<T>> {
      */
     @Override
     public Position<T> next() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> aux = lista.pop();
+        for(Position<T> p : tree.children(aux)){
+            reverseList.addFirst(p);
+        }
+        while (!reverseList.isEmpty()){
+            lista.addFirst(reverseList.pop());
+        }
+        return aux;
     }
 
 }
