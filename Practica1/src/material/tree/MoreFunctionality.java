@@ -26,21 +26,25 @@ public class MoreFunctionality<T> {
         LinkedList<T> elements = new LinkedList<>();
         if(tree.root() != null){
             //La idea va a ser ir guardando la altura y vamos explorando todo el árbol
-            int depth = 0;
-            int i = -1;
             LinkedList<Position<T>> listaAux =new LinkedList<>();
             Position<T> nodo = tree.root();
-            listaAux.add(nodo);
-            //SEGUIR AQUI!
-            for(Position<T> p :tree.children(nodo)){
-                listaAux.add(p);
+            listaAux.add(nodo);//Añado la raíz
+            while(!listaAux.isEmpty()){
+                //Vamos a ir pasando por todos los nodos, quedandonos con el primero
+                int n = listaAux.size();
+                for (int i = 1; i <= n; i++) {
+                    Position<T> aux = listaAux.pop();
+                    if(i==1){
+                        elements.add(aux.getElement());
+                    }
+                    for(Position<T> p: tree.children(aux)){
+                        listaAux.add(p);
+                    }
+
+                }
             }
-            depth++;
-
-
         }
-
-
+        return elements;
     }
 
    /**
