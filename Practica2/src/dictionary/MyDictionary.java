@@ -109,8 +109,8 @@ public class MyDictionary<K,V> implements Dictionary<K,V> {
             p++;
         }
         primo = p;
-        a = (int) (Math.random() * (primo-1));
-        b = (int) (Math.random() * (primo-1));
+        a = (int) (Math.random() * (primo));
+        b = (int) (Math.random() * (primo));
     }
 
     public MyDictionary(int cap){
@@ -128,9 +128,9 @@ public class MyDictionary<K,V> implements Dictionary<K,V> {
     private boolean esPrimo(int n){
         boolean primo = true;
         int aux=2;
-        while(primo){
+        while(primo && aux <(n/2)){
             primo = !(n % aux == 0);
-            n++;
+            aux++;
         }
         return primo;
     }
@@ -142,7 +142,9 @@ public class MyDictionary<K,V> implements Dictionary<K,V> {
      * @return
      */
     private int hashValue(K key) {
-        return (a*key.hashCode()+b) % dictionary.length;
+        long hc = key.hashCode();
+        Long mad = ((a*hc +b)%primo) % dictionary.length;
+        return mad.intValue();
     }
     
     @Override
@@ -179,11 +181,14 @@ public class MyDictionary<K,V> implements Dictionary<K,V> {
             throw new IllegalStateException("Null key");
         }
         int hash = hashValue(key);
-        for (HashEntry<K,V> entry: dictionary[hash]) {
-            if(key.equals(entry)){
-                return entry;
+        if(dictionary[hash]!= null){
+            for (HashEntry<K,V> entry: dictionary[hash]) {
+                if(key.equals(entry.getKey())){
+                    return entry;
+                }
             }
         }
+
         return null;
     }
 
@@ -219,8 +224,10 @@ public class MyDictionary<K,V> implements Dictionary<K,V> {
     @Override
     public Iterable<Entry<K, V>> entries() {
         LinkedList<Entry<K,V>> list = new LinkedList<>();
-        for (int i = 0; i < dictionary.length; i++) {
-            list.addAll(dictionary[i]);
+        for (LinkedList<HashEntry<K,V>> elem: dictionary) {
+            if(elem != null) {
+                list.addAll(elem);
+            }
         }
         return list;
     }
@@ -235,8 +242,10 @@ public class MyDictionary<K,V> implements Dictionary<K,V> {
     private void rehash() {
         MyDictionary<K,V> nDictionary = new MyDictionary<>(2* dictionary.length);
         for (int i = 0; i < dictionary.length; i++) {
-            for(HashEntry<K,V> entry :dictionary[i]){
-                nDictionary.insert(entry.getKey(),entry.getValue());
+            if(dictionary[i] != null){
+                for(HashEntry<K,V> entry :dictionary[i]){
+                    nDictionary.insert(entry.getKey(),entry.getValue());
+                }
             }
         }
         dictionary = nDictionary.getDictionary();
@@ -245,19 +254,19 @@ public class MyDictionary<K,V> implements Dictionary<K,V> {
         primo = nDictionary.getPrimo();
     }
 
-    private LinkedList<HashEntry<K, V>>[] getDictionary() {
+    public LinkedList<HashEntry<K, V>>[] getDictionary() {
         return dictionary;
     }
 
-    private int getA() {
+    public int getA() {
         return a;
     }
 
-    private int getB() {
+    public int getB() {
         return b;
     }
 
-    private int getPrimo() {
+    public int getPrimo() {
         return primo;
     }
 }

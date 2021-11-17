@@ -19,7 +19,7 @@ public class MyDictionaryTest {
     @Test
     public void testPRUEBA() {
         int[] arr = new int[10];
-        System.out.println(arr.length);
+        System.out.println((-1)%3);
     }
     
     /**
@@ -84,7 +84,8 @@ public class MyDictionaryTest {
         Entry<String, String> mayte = instance.insert("Mayte", "912127651");
         Entry<String, String> andres = instance.insert("Andres", "912127624");
         assertEquals(instance.size(), 3);
-        assertEquals(instance.find("jose").getValue(), "912127654");
+        assertEquals(instance.find("Jose")
+                .getValue(), "912127654");
         instance.remove(jose);
         assertEquals(instance.find("jose"), null);
         Entry<String, String> andres2 = instance.insert("Andres", "654321987");
@@ -128,7 +129,7 @@ public class MyDictionaryTest {
     public void testEntries() {
         System.out.println("entries");
         instance = new MyDictionary<>();
-         ArrayList<Entry<String,String>> l = new ArrayList<>();
+        ArrayList<Entry<String,String>> l = new ArrayList<>();
         Entry<String, String> jose = instance.insert("Jose", "912127654");
         l.add(jose);
         Entry<String, String> mayte = instance.insert("Mayte", "912127651");

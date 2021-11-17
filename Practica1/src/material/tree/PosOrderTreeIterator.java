@@ -18,8 +18,13 @@ public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
     public PosOrderTreeIterator(Tree<T> tree) {
         this.tree = tree;
         lista = new LinkedList<>();
-        lista.add(tree.root());
+        Position<T> node = tree.root();
         reverseList = new LinkedList<>();
+        lista.addFirst(node);
+        while (tree.children(node).iterator().hasNext()){
+            node = tree.children(node).iterator().next();
+            lista.add(node);
+        }
     }
 
     public PosOrderTreeIterator(Tree<T> tree, Position<T> root) {
@@ -41,6 +46,7 @@ public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
     public Position<T> next() {
         Position<T> aux = lista.getFirst();
         while(tree.children(aux).iterator().hasNext()){
+            //Si añadiese en un conjunto los que ya he recorrido, está
             for(Position<T> p : tree.children(aux)){
                 reverseList.addFirst(p);
             }
