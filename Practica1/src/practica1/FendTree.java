@@ -6,14 +6,26 @@ package practica1;
  * @author mayte
  */
 public class FendTree {
-    
+
+    int[] FTree;
     /**
      * Builds a Fendwick Tree with the array that receives
      * 
      * @param array
      */
     public FendTree(int [] array){
-      throw new  UnsupportedOperationException("Not implemented.");
+        FTree = new int[array.length+1];
+        FTree[0] = 0;
+        for(int i=1; i< FTree.length;i++){
+            //Calculo cual es su padre
+            int y = i-(i&(-i));
+            //Ahora sumamos el intervalo del padre al hijo
+            int suma = 0;
+            for(int j = y; j<i;j++){
+                suma += array[j];
+            }
+            FTree[i] = suma;
+        }
     }
     
     /**
@@ -23,7 +35,13 @@ public class FendTree {
      * @return 
      */
     public int getSum(int index){
-      throw new  UnsupportedOperationException("Not implemented.");
+        int valor = 0;
+        int x = index+1;
+        while (x >0){
+            valor += FTree[x];
+            x=x-(x&(-x));
+        }
+        return valor;
     }
  
     /**
@@ -33,7 +51,14 @@ public class FendTree {
      * @param val
      */
     public void upDate (int index, int val){
-       throw new  UnsupportedOperationException("Not implemented.");  
+        if(index<0 || index> FTree.length){
+            throw new IndexOutOfBoundsException();
+        }
+        int x = index+1;
+        while (x< FTree.length){
+            FTree[x] +=val;
+            x = x + (x &(-x));
+        }
     }
     
 }

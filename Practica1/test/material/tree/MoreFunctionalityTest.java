@@ -59,7 +59,7 @@ public class MoreFunctionalityTest {
         assertEquals(instance.leftView(t).toString(), l.toString());
         l = Arrays.asList('A','B','F','J','L');
         t = general();
-        assertEquals(instance.leftView(t).toString(),l.toString());
+        assertEquals(l.toString(),instance.leftView(t).toString());
     }
 
     /**
@@ -79,7 +79,7 @@ public class MoreFunctionalityTest {
         assertEquals(instance.rightView(t).toString(), l.toString());
         l = Arrays.asList('A','E','I','K','L');
         t = general();
-        assertEquals(instance.rightView(t).toString(),l.toString());
+        assertEquals(l.toString(),instance.rightView(t).toString());
     }
     
 }
