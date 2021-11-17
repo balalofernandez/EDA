@@ -16,6 +16,11 @@ public class MyDictionaryTest {
     public MyDictionaryTest() {
     }
 
+    @Test
+    public void testPRUEBA() {
+        int[] arr = new int[10];
+        System.out.println(arr.length);
+    }
     
     /**
      * Test of size method, of class MyDictionary.
