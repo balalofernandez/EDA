@@ -3,6 +3,7 @@ package material.graphs;
 
 import material.Position;
 
+import javax.swing.border.EmptyBorder;
 import java.util.*;
 
 /**
@@ -20,9 +21,32 @@ public class ELGraph<V,E> implements Graph<V,E> {
 
         V value;
 
+        public ElVertex(V value) {
+            this.value = value;
+        }
+
         @Override
         public V getElement() {
             return value;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if( obj == this)
+                return true;
+            if (!(obj instanceof ElVertex))
+                return false;
+
+            ElVertex<V> v = (ElVertex<V>) obj;
+            return v.getElement().equals(value);
+        }
+
+        public V getValue() {
+            return value;
+        }
+
+        public void setValue(V value) {
+            this.value = value;
         }
     }
     private class ElEdge<V,E> implements Edge<E>{
@@ -30,7 +54,13 @@ public class ELGraph<V,E> implements Graph<V,E> {
             Vertex<V> end;
             E value;
 
-            @Override
+        public ElEdge(Vertex<V> start, Vertex<V> end, E value) {
+            this.start = start;
+            this.end = end;
+            this.value = value;
+        }
+
+        @Override
             public E getElement() {
                 return value;
             }
@@ -107,36 +137,76 @@ public class ELGraph<V,E> implements Graph<V,E> {
                 return edge;
             }
         }
+        return null;
     }
 
     @Override
     public V replace(Vertex<V> vertex, V vertexValue) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        V oldValue = vertex.getElement();
+        ElVertex<V> v  = (ElVertex<V>) vertex;
+        v.setValue(vertexValue);
+        return oldValue;
     }
 
     @Override
     public E replace(Edge<E> edge, E edgeValue) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        E oldValue = edge.getElement();
+        ElEdge<V,E> e = (ElEdge<V,E>) edge;
+        e.value = edgeValue;
+        return oldValue;
     }
 
     @Override
     public Vertex<V> insertVertex(V value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Suponemos que puede haber vertices repetidos?
+        ElVertex<V> v = new ElVertex<>(value);
+        vertexList.add(v);
+        return v;
     }
 
     @Override
     public Edge<E> insertEdge(Vertex<V> v1, Vertex<V> v2, E edgeValue) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Por un lado tenemos que ver que ambos vértices existan
+        if(!vertexList.contains(v1))
+            throw new RuntimeException("V1 doesn't exist");
+        if(!vertexList.contains(v2))
+            throw new RuntimeException("V2 doesn't exist");
+        
+        //También tenemos que ver que esa arista no está en la lista
+        ElEdge<V,E> edge = new ElEdge<>(v1,v2,edgeValue);
+        if(!edgeList.contains(edge)){
+            edgeList.add(edge);
+        }
+        return edge;
     }
 
     @Override
     public V removeVertex(Vertex<V> vertex) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Para eliminar un vértice, también tenemos que eliminar todas las aristas que están apuntando al vértice
+        V oldValue = vertex.getElement();
+        ElVertex<V> v = (ElVertex<V>) vertex;
+
+        //No se debe eliminar un elemento de un conjunto mientras se itera
+        List<ElEdge<V,E>> listaAristas = new LinkedList<>();
+        for (ElEdge<V,E> e: edgeList) {//Recorremos la lista de aristas
+            if(e.getStart().equals(v) || e.getEnd().equals(v)){
+                listaAristas.add(e);
+            }
+        }
+
+        for (ElEdge<V,E> e: listaAristas){
+            edgeList.remove(e);
+        }
+        return oldValue;
     }
 
     @Override
     public E removeEdge(Edge<E> edge) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Como en un vértice no tenemos los edge, simplemente lo borramos
+        E value = edge.getElement();
+        ElEdge<V,E> e = (ElEdge<V, E>) edge;
+        edgeList.remove(e);
+        return value;
     }
     
 }
