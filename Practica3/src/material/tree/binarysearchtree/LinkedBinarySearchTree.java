@@ -21,6 +21,30 @@ public class LinkedBinarySearchTree<E> implements BinarySearchTree<E> {
     Comparator<E> comparator;
     int size;
 
+    public LinkedBinaryTree<E> getBinTree() {
+        return binTree;
+    }
+
+    public void setBinTree(LinkedBinaryTree<E> binTree) {
+        this.binTree = binTree;
+    }
+
+    public Comparator<E> getComparator() {
+        return comparator;
+    }
+
+    public void setComparator(Comparator<E> comparator) {
+        this.comparator = comparator;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     /**
      * Creates a BinarySearchTree with the default comparator.
      */
